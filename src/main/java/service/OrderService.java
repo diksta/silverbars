@@ -5,26 +5,35 @@ import domain.OrderType;
 import domain.Summary;
 import domain.SummaryItem;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static domain.OrderType.*;
 
 public class OrderService {
 
-    List<Order> buyOrders = new ArrayList<>();
-    List<Order> sellOrders = new ArrayList<>();
+    Map<BigDecimal, Order> orders = new HashMap<>();
 
     public void register(Order order) {
-        if (order.getType() == OrderType.BUY) {
-            buyOrders.add(order);
-        } else {
-            sellOrders.add(order);
-        }
+        orders.compute(order.getPrice(), (k,v) -> collateOrders(v, order));
+    }
+
+    private Order collateOrders(Order existingOrder, Order newOrder) {
+        return newOrder;
     }
 
     public Summary summary() {
-        return new Summary(
-           buyOrders.stream().map(o -> new SummaryItem(o.getQuantity(), o.getPrice())).collect(Collectors.toList()),
-           sellOrders.stream().map(o -> new SummaryItem(o.getQuantity(), o.getPrice())).collect(Collectors.toList()));
+        return new Summary(filterOrders(BUY), filterOrders(SELL));
+    }
+
+    private List<SummaryItem> filterOrders(OrderType orderType) {
+        return orders.values().stream()
+                .filter(order -> order.getType() == orderType)
+                .map(o -> new SummaryItem(o.getQuantity(), o.getPrice()))
+                .sorted()
+                .collect(Collectors.toList());
     }
 }
