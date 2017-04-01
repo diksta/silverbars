@@ -5,24 +5,21 @@ import domain.OrderType;
 import domain.Summary;
 import domain.SummaryItem;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static domain.OrderType.*;
+import static domain.OrderType.BUY;
+import static domain.OrderType.SELL;
 
 public class OrderService {
 
-    Map<BigDecimal, Order> orders = new HashMap<>();
+    List<Order> orders = new ArrayList<>();
 
-    public void register(Order order) {
-        orders.compute(order.getPrice(), (k,v) -> collateOrders(v, order));
-    }
-
-    private Order collateOrders(Order existingOrder, Order newOrder) {
-        return newOrder;
+    public void register(Order... newOrders) {
+        Collections.addAll(orders, newOrders);
     }
 
     public Summary summary() {
@@ -30,10 +27,12 @@ public class OrderService {
     }
 
     private List<SummaryItem> filterOrders(OrderType orderType) {
-        return orders.values().stream()
-                .filter(order -> order.getType() == orderType)
+        return orders.stream()
+                .filter(o -> o.getType() == orderType)
                 .map(o -> new SummaryItem(o.getQuantity(), o.getPrice()))
-                .sorted()
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(si -> si.getPrice(),
+                        Collectors.reducing((a, b) -> new SummaryItem(a.getQuantity().plus(b.getQuantity()), a.getPrice()))))
+                .values().stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
     }
+
 }

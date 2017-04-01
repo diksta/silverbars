@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.math.BigDecimal;
 
-public class SummaryItem {
+public class SummaryItem implements Comparable<SummaryItem> {
     private Kilograms quantity;
     private BigDecimal price;
 
@@ -39,5 +39,18 @@ public class SummaryItem {
                 .append(quantity)
                 .append(price)
                 .toHashCode();
+    }
+
+    @Override
+    public int compareTo(SummaryItem o) {
+        return 0;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Kilograms getQuantity() {
+        return quantity;
     }
 }
