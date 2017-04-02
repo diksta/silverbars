@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static domain.OrderType.BUY;
 import static domain.OrderType.SELL;
@@ -163,5 +165,22 @@ public class OrderServiceTest {
         assertThat(orderService.summary().buyOrders(), hasItems(new SummaryItem(30, price100, BUY)));
     }
 
+    @Test
+    public void shouldSortBuysWithHighestPriceFirst() throws Exception {
+        //Given
+        Order order1 = new Order(new UserId("user2"), 140, BigDecimal.valueOf(100), BUY);
+        Order order2 = new Order(new UserId("user1"), 350, BigDecimal.valueOf(250), BUY);
+        Order order3 = new Order(new UserId("user2"), 120, BigDecimal.valueOf(120), BUY);
+        SummaryItem summaryForOrder1 = new SummaryItem(140, BigDecimal.valueOf(100), BUY);
+        SummaryItem summaryForOrder2 = new SummaryItem(350, BigDecimal.valueOf(250), BUY);
+        SummaryItem summaryForOrder3 = new SummaryItem(120, BigDecimal.valueOf(120), BUY);
 
+        //When
+        orderService.register(order1, order2, order3);
+
+        //Then
+        List<SummaryItem> expectedOrders = Arrays.asList(summaryForOrder2, summaryForOrder3, summaryForOrder1);
+        assertThat(orderService.summary().buyOrders(), is(expectedOrders));
+    }
+    
 }

@@ -27,7 +27,7 @@ public class OrderService {
     }
 
     private List<SummaryItem> filterOrders(List<SummaryItem> summaryItems, OrderType orderType) {
-        return summaryItems.stream().filter(o -> o.getType() == orderType).collect(Collectors.toList());
+        return summaryItems.stream().filter(o -> o.getType() == orderType).sorted().collect(Collectors.toList());
     }
 
     private List<SummaryItem> createSummaryItems() {
@@ -43,7 +43,7 @@ public class OrderService {
     }
 
     private Function<Order, SummaryItem> convertToSummaryItem() {
-        return o -> new SummaryItem(o.getQuantity(), o.getPrice(), o.getType());
+        return o -> SummaryItem.from(o.getQuantity(), o.getPrice(), o.getType());
     }
 
 }

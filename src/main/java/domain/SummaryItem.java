@@ -37,6 +37,7 @@ public class SummaryItem implements Comparable<SummaryItem> {
         return new EqualsBuilder()
                 .append(quantity, summaryItem.quantity)
                 .append(price, summaryItem.price)
+                .append(type, summaryItem.type)
                 .isEquals();
     }
 
@@ -45,6 +46,7 @@ public class SummaryItem implements Comparable<SummaryItem> {
         return new HashCodeBuilder(17, 37)
                 .append(quantity)
                 .append(price)
+                .append(type)
                 .toHashCode();
     }
 
@@ -63,24 +65,20 @@ public class SummaryItem implements Comparable<SummaryItem> {
 
     public SummaryItem combineQuantities(SummaryItem other) {
         assert price == other.price;
-        Tuple combined = (type == other.type) ? new Tuple(other.quantity + quantity, type) : combineMismatchingQuantities(quantity, type, other.quantity, other.type);
-        return new SummaryItem(combined.total, price, combined.type);
+        return (type == other.type) ? new SummaryItem(other.quantity + quantity, price, type) :
+                                             combineMismatchingQuantities(this, other);
     }
 
-    private static Tuple combineMismatchingQuantities(int quantity1, OrderType type1, int quantity2, OrderType type2) {
-        int first = type1 == BUY ? quantity1 : -quantity1;
-        int second = type2 == BUY ? quantity2 : -quantity2;
-        int total = first + second;
-        return total < 0 ? new Tuple(Math.abs(total), SELL) : new Tuple(total, BUY);
+    private static SummaryItem combineMismatchingQuantities(SummaryItem si1, SummaryItem si2) {
+        int total = getQuantityAndNegateForSell(si1) + getQuantityAndNegateForSell(si2);
+        return total < 0 ? new SummaryItem(Math.abs(total), si1.price, SELL) : new SummaryItem(total, si1.price, BUY);
     }
 
-    private static class Tuple {
-        int total;
-        private OrderType type;
+    private static int getQuantityAndNegateForSell(SummaryItem summaryItem) {
+        return summaryItem.type == BUY ? summaryItem.quantity : -summaryItem.quantity;
+    }
 
-        public Tuple(int total, OrderType type) {
-            this.total = total;
-            this.type = type;
-        }
+    public static SummaryItem from(int quantity, BigDecimal price, OrderType type) {
+        return new SummaryItem(quantity, price, type);
     }
 }
