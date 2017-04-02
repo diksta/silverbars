@@ -57,5 +57,17 @@ public class SummaryItemTest {
         assertThat(new SummaryItem(1244, new BigDecimal(234), BUY).toString(), is("12.44 kg for £234"));
     }
 
+    @Test
+    public void shouldCompareBuysAsHighestPriceFirst() throws Exception {
+        assertThat(new SummaryItem(1244, new BigDecimal(100), BUY).compareTo(new SummaryItem(1244, new BigDecimal(100), BUY)), is(0));
+        assertThat(new SummaryItem(1244, new BigDecimal(300), BUY).compareTo(new SummaryItem(1244, new BigDecimal(200), BUY)), is(-100));
+        assertThat(new SummaryItem(1244, new BigDecimal(200), BUY).compareTo(new SummaryItem(1244, new BigDecimal(300), BUY)), is(100));
+    }
 
+    @Test
+    public void shouldCompareSellsAsLowestPriceFirst() throws Exception {
+        assertThat(new SummaryItem(1244, new BigDecimal(100), SELL).compareTo(new SummaryItem(1244, new BigDecimal(100), SELL)), is(0));
+        assertThat(new SummaryItem(1244, new BigDecimal(300), SELL).compareTo(new SummaryItem(1244, new BigDecimal(200), SELL)), is(100));
+        assertThat(new SummaryItem(1244, new BigDecimal(200), SELL).compareTo(new SummaryItem(1244, new BigDecimal(300), SELL)), is(-100));
+    }
 }

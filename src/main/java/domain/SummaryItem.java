@@ -52,7 +52,11 @@ public class SummaryItem implements Comparable<SummaryItem> {
 
     @Override
     public int compareTo(SummaryItem o) {
-        return 0;
+        if (o.type == BUY) {
+            return o.getPrice().subtract(price).intValue();
+        } else {
+            return price.subtract(o.getPrice()).intValue();
+        }
     }
 
     public BigDecimal getPrice() {
