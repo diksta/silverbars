@@ -17,8 +17,8 @@ public class SummaryItemTest {
         int quantity2 = 200;
         BigDecimal price1 = BigDecimal.TEN;
         BigDecimal price2 = BigDecimal.ONE;
-        SummaryItem summaryItem1 = new SummaryItem(quantity1, price1, BUY);
-        SummaryItem summaryItem2 = new SummaryItem(quantity2, price2, BUY);
+        SummaryItem summaryItem1 = SummaryItem.from(quantity1, price1, BUY);
+        SummaryItem summaryItem2 = SummaryItem.from(quantity2, price2, BUY);
         summaryItem1.combineQuantities(summaryItem2);
     }
 
@@ -27,9 +27,9 @@ public class SummaryItemTest {
         int quantity1 = 100;
         int quantity2 = 200;
         BigDecimal price = BigDecimal.TEN;
-        SummaryItem summaryItem1 = new SummaryItem(quantity1, price, BUY);
-        SummaryItem summaryItem2 = new SummaryItem(quantity2, price, BUY);
-        assertThat(summaryItem1.combineQuantities(summaryItem2), is(new SummaryItem(300, price, BUY)));
+        SummaryItem summaryItem1 = SummaryItem.from(quantity1, price, BUY);
+        SummaryItem summaryItem2 = SummaryItem.from(quantity2, price, BUY);
+        assertThat(summaryItem1.combineQuantities(summaryItem2), is(SummaryItem.from(300, price, BUY)));
     }
 
     @Test
@@ -37,9 +37,9 @@ public class SummaryItemTest {
         int quantity1 = 100;
         int quantity2 = 200;
         BigDecimal price = BigDecimal.TEN;
-        SummaryItem summaryItem1 = new SummaryItem(quantity1, price, SELL);
-        SummaryItem summaryItem2 = new SummaryItem(quantity2, price, SELL);
-        assertThat(summaryItem1.combineQuantities(summaryItem2), is(new SummaryItem(300, price, SELL)));
+        SummaryItem summaryItem1 = SummaryItem.from(quantity1, price, SELL);
+        SummaryItem summaryItem2 = SummaryItem.from(quantity2, price, SELL);
+        assertThat(summaryItem1.combineQuantities(summaryItem2), is(SummaryItem.from(300, price, SELL)));
     }
 
     @Test
@@ -47,27 +47,14 @@ public class SummaryItemTest {
         int buyQuantity =  100;
         int sellQuantity = 400;
         BigDecimal price = BigDecimal.TEN;
-        SummaryItem summaryItem1 = new SummaryItem(buyQuantity, price, BUY);
-        SummaryItem summaryItem2 = new SummaryItem(sellQuantity, price, SELL);
-        assertThat(summaryItem1.combineQuantities(summaryItem2), is(new SummaryItem(300, price, SELL)));
+        SummaryItem summaryItem1 = SummaryItem.from(buyQuantity, price, BUY);
+        SummaryItem summaryItem2 = SummaryItem.from(sellQuantity, price, SELL);
+        assertThat(summaryItem1.combineQuantities(summaryItem2), is(SummaryItem.from(300, price, SELL)));
     }
 
     @Test
     public void shouldReportToStringCorrectly() throws Exception {
-        assertThat(new SummaryItem(1244, new BigDecimal(234), BUY).toString(), is("12.44 kg for £234"));
+        assertThat(SummaryItem.from(1244, new BigDecimal(234), BUY).toString(), is("12.44 kg for £234"));
     }
 
-    @Test
-    public void shouldCompareBuysAsHighestPriceFirst() throws Exception {
-        assertThat(new SummaryItem(1244, new BigDecimal(100), BUY).compareTo(new SummaryItem(1244, new BigDecimal(100), BUY)), is(0));
-        assertThat(new SummaryItem(1244, new BigDecimal(300), BUY).compareTo(new SummaryItem(1244, new BigDecimal(200), BUY)), is(-100));
-        assertThat(new SummaryItem(1244, new BigDecimal(200), BUY).compareTo(new SummaryItem(1244, new BigDecimal(300), BUY)), is(100));
-    }
-
-    @Test
-    public void shouldCompareSellsAsLowestPriceFirst() throws Exception {
-        assertThat(new SummaryItem(1244, new BigDecimal(100), SELL).compareTo(new SummaryItem(1244, new BigDecimal(100), SELL)), is(0));
-        assertThat(new SummaryItem(1244, new BigDecimal(300), SELL).compareTo(new SummaryItem(1244, new BigDecimal(200), SELL)), is(100));
-        assertThat(new SummaryItem(1244, new BigDecimal(200), SELL).compareTo(new SummaryItem(1244, new BigDecimal(300), SELL)), is(-100));
-    }
 }

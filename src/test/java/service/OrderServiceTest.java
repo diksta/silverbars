@@ -35,7 +35,7 @@ public class OrderServiceTest {
         orderService.register(order);
 
         //Then
-        assertThat(orderService.summary().buyOrders(), hasItems(new SummaryItem(quantity, price, BUY)));
+        assertThat(orderService.summary().buyOrders(), hasItems(SummaryItem.from(quantity, price, BUY)));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class OrderServiceTest {
         orderService.register(order);
 
         //Then
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(quantity, price, SELL)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(quantity, price, SELL)));
     }
 
     @Test
@@ -67,9 +67,9 @@ public class OrderServiceTest {
 
         //Then
         assertThat(orderService.summary().buyOrders().size(), is(1));
-        assertThat(orderService.summary().buyOrders(), hasItems(new SummaryItem(buyQuantity, buyPrice, BUY)));
+        assertThat(orderService.summary().buyOrders(), hasItems(SummaryItem.from(buyQuantity, buyPrice, BUY)));
         assertThat(orderService.summary().sellOrders().size(), is(1));
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(sellQuantity, sellPrice, SELL)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(sellQuantity, sellPrice, SELL)));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class OrderServiceTest {
 
         //Then
         int expectedTotal = quantity1 + quantity2;
-        assertThat(orderService.summary().buyOrders(), hasItems(new SummaryItem(expectedTotal, price, BUY)));
+        assertThat(orderService.summary().buyOrders(), hasItems(SummaryItem.from(expectedTotal, price, BUY)));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class OrderServiceTest {
 
         //Then
         int expectedTotal = quantity1 + quantity2;
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(expectedTotal, price, SELL)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(expectedTotal, price, SELL)));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class OrderServiceTest {
 
         //Then
         int expectedTotal = quantity1 + quantity2 + quantity3;
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(expectedTotal, price, SELL)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(expectedTotal, price, SELL)));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class OrderServiceTest {
 
         //Then
         int expectedTotal = 230;
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(expectedTotal, price, SELL)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(expectedTotal, price, SELL)));
         assertThat(orderService.summary().buyOrders().size(), is(0));
     }
 
@@ -160,8 +160,8 @@ public class OrderServiceTest {
 
         //Then
         int expectedTotal = 230;
-        assertThat(orderService.summary().sellOrders(), hasItems(new SummaryItem(20, price250, SELL)));
-        assertThat(orderService.summary().buyOrders(), hasItems(new SummaryItem(30, price100, BUY)));
+        assertThat(orderService.summary().sellOrders(), hasItems(SummaryItem.from(20, price250, SELL)));
+        assertThat(orderService.summary().buyOrders(), hasItems(SummaryItem.from(30, price100, BUY)));
     }
 
     @Test
@@ -170,9 +170,9 @@ public class OrderServiceTest {
         Order order1 = new Order("user2", 140, BigDecimal.valueOf(100), BUY);
         Order order2 = new Order("user1", 350, BigDecimal.valueOf(250), BUY);
         Order order3 = new Order("user2", 120, BigDecimal.valueOf(120), BUY);
-        SummaryItem summaryForOrder1 = new SummaryItem(140, BigDecimal.valueOf(100), BUY);
-        SummaryItem summaryForOrder2 = new SummaryItem(350, BigDecimal.valueOf(250), BUY);
-        SummaryItem summaryForOrder3 = new SummaryItem(120, BigDecimal.valueOf(120), BUY);
+        SummaryItem summaryForOrder1 = SummaryItem.from(140, BigDecimal.valueOf(100), BUY);
+        SummaryItem summaryForOrder2 = SummaryItem.from(350, BigDecimal.valueOf(250), BUY);
+        SummaryItem summaryForOrder3 = SummaryItem.from(120, BigDecimal.valueOf(120), BUY);
 
         //When
         orderService.register(order1, order2, order3);
@@ -188,9 +188,9 @@ public class OrderServiceTest {
         Order order1 = new Order("user2", 140, BigDecimal.valueOf(100), SELL);
         Order order2 = new Order("user1", 350, BigDecimal.valueOf(250), SELL);
         Order order3 = new Order("user2", 120, BigDecimal.valueOf(120), SELL);
-        SummaryItem summaryForOrder1 = new SummaryItem(140, BigDecimal.valueOf(100), SELL);
-        SummaryItem summaryForOrder2 = new SummaryItem(350, BigDecimal.valueOf(250), SELL);
-        SummaryItem summaryForOrder3 = new SummaryItem(120, BigDecimal.valueOf(120), SELL);
+        SummaryItem summaryForOrder1 = SummaryItem.from(140, BigDecimal.valueOf(100), SELL);
+        SummaryItem summaryForOrder2 = SummaryItem.from(350, BigDecimal.valueOf(250), SELL);
+        SummaryItem summaryForOrder3 = SummaryItem.from(120, BigDecimal.valueOf(120), SELL);
 
         //When
         orderService.register(order1, order2, order3);

@@ -1,21 +1,15 @@
 package service;
 
-import domain.Order;
-import domain.OrderType;
-import domain.Summary;
-import domain.SummaryItem;
+import domain.*;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static domain.OrderType.BUY;
-import static domain.OrderType.SELL;
-
 public class OrderService {
 
-    List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     public void register(Order... newOrders) {
         Collections.addAll(orders, newOrders);
@@ -23,11 +17,11 @@ public class OrderService {
 
     public Summary summary() {
         List<SummaryItem> summaryItems = createSummaryItems();
-        return new Summary(filterOrders(summaryItems, BUY), filterOrders(summaryItems, SELL));
+        return new Summary(filterOrders(summaryItems, BuySummaryItem.class), filterOrders(summaryItems, SellSummaryItem.class));
     }
 
-    private List<SummaryItem> filterOrders(List<SummaryItem> summaryItems, OrderType orderType) {
-        return summaryItems.stream().filter(o -> o.getType() == orderType).sorted().collect(Collectors.toList());
+    private List<SummaryItem> filterOrders(List<SummaryItem> summaryItems, Class<? extends SummaryItem> summaryType) {
+        return summaryItems.stream().filter(o -> o.getClass() == summaryType).sorted().collect(Collectors.toList());
     }
 
     private List<SummaryItem> createSummaryItems() {
