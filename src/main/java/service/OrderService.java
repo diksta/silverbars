@@ -11,9 +11,9 @@ public class OrderService {
 
     private List<Order> orders = new ArrayList<>();
 
-    public void register(Order... newOrders) {
-        Collections.addAll(orders, newOrders);
-    }
+    public void register(Order... newOrders) { Collections.addAll(orders, newOrders); }
+
+    public void cancel(String orderId) { orders.remove(Order.forId(orderId)); }
 
     public Summary summary() {
         List<SummaryItem> summaryItems = createSummaryItems();

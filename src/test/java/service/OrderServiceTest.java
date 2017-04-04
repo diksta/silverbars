@@ -199,4 +199,17 @@ public class OrderServiceTest {
         List<SummaryItem> expectedOrders = Arrays.asList(summaryForOrder1, summaryForOrder3, summaryForOrder2);
         assertThat(orderService.summary().sellOrders(), is(expectedOrders));
     }
+
+    @Test
+    public void shouldCancelRegisteredOrder() throws Exception {
+        //Given
+        Order order = new Order("testUser", 140, BigDecimal.valueOf(100), SELL);
+        orderService.register(order);
+
+        //When
+        orderService.cancel(order.getOrderId());
+
+        //Then
+        assertThat(orderService.summary().sellOrders().size(), is(0));
+    }
 }
