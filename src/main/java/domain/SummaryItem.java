@@ -17,12 +17,13 @@ public class SummaryItem implements Comparable<SummaryItem>  {
 
     private int quantity;
     private BigDecimal price;
-    private Comparator comparator;
-    private Combiner combiner;
     private OrderType orderType;
 
+    private Comparator comparator;
+    private Combiner combiner;
+
     public static SummaryItem from(Order order) {
-        return order.type == BUY ? buy(order.grams, order.price) : sell(order.grams, order.price);
+        return order.getType() == BUY ? buy(order.getGrams(), order.getPrice()) : sell(order.getGrams(), order.getPrice());
     }
 
     public static SummaryItem sell(int sellQuantity, BigDecimal sellPrice) {

@@ -8,10 +8,10 @@ public class Order {
 
     private final String orderId;
 
-    protected String userId;
-    protected int grams;
-    protected BigDecimal price;
-    protected OrderType type;
+    private String userId;
+    private int grams;
+    private BigDecimal price;
+    private OrderType type;
 
     public Order(String userId, int grams, BigDecimal price, OrderType type) {
         this.orderId = UUID.randomUUID().toString();
@@ -45,6 +45,14 @@ public class Order {
     public String getOrderId() {
         return orderId;
     }
+
+    public String getUserId() { return userId; }
+
+    public int getGrams() { return grams; }
+
+    public BigDecimal getPrice() { return price; }
+
+    public OrderType getType() { return type; }
 
     @Override
     public String toString() {
