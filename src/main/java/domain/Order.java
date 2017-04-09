@@ -7,33 +7,22 @@ import java.util.UUID;
 public class Order {
 
     private final String orderId;
-    private String userId;
-    private int quantity;
-    private BigDecimal price;
-    private OrderType type;
 
-    public Order(String userId, int quantity, BigDecimal price, OrderType type) {
+    protected String userId;
+    protected int grams;
+    protected BigDecimal price;
+    protected OrderType type;
+
+    public Order(String userId, int grams, BigDecimal price, OrderType type) {
         this.orderId = UUID.randomUUID().toString();
         this.userId = userId;
-        this.quantity = quantity;
+        this.grams = grams;
         this.price = price;
         this.type = type;
     }
 
     private Order(String orderId) {
         this.orderId = orderId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public OrderType getType() {
-        return type;
     }
 
     public static Order forId(String orderId) {
@@ -62,7 +51,7 @@ public class Order {
         return "Order{" +
                 "orderId='" + orderId + '\'' +
                 ", userId='" + userId + '\'' +
-                ", quantity=" + quantity +
+                ", grams=" + grams +
                 ", price=" + price +
                 ", type=" + type +
                 '}';

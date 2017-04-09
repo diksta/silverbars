@@ -25,7 +25,7 @@ public class BuySummaryItem implements SummaryItem, Comparable<BuySummaryItem>{
     }
 
     public SummaryItem combineQuantities(SummaryItem other) {
-        assert price == other.getPrice();
+        assert other == DEFAULT_SUMMARY_ITEM || price == other.getPrice();
         if (other instanceof BuySummaryItem) {
             return new BuySummaryItem(other.getQuantity() + quantity, price);
         } else {

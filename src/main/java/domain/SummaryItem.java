@@ -6,13 +6,15 @@ import static domain.OrderType.BUY;
 
 public interface SummaryItem {
 
-    public static final double GRAMS_IN_KG = 100d;
+    double GRAMS_IN_KG = 100d;
 
-    public static SummaryItem from(int quantity, BigDecimal price, OrderType type) {
-        return type == BUY ? new BuySummaryItem(quantity, price) : new SellSummaryItem(quantity, price);
+    BuySummaryItem DEFAULT_SUMMARY_ITEM = new BuySummaryItem(0, BigDecimal.ZERO);
+
+    static SummaryItem from(Order order) {
+        return order.type == BUY ? new BuySummaryItem(order.grams, order.price) : new SellSummaryItem(order.grams, order.price);
     }
 
-    public SummaryItem combineQuantities(SummaryItem other);
+    SummaryItem combineQuantities(SummaryItem other);
 
     BigDecimal getPrice();
 
