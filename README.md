@@ -8,6 +8,12 @@
 
 ./build/libs/orderboard-1.0-SNAPSHOT.jar
 
+## Services
+
+### Order Service
+
+Register orders, fetch or cancel existing orders, or retrieve an order summary. 
+
 ## Assumptions
 
 - Weights are to the nearest gram

@@ -12,8 +12,8 @@ public class Summary {
     private List<SummaryItem> buyOrders = new ArrayList<>();
 
     public Summary(Collection<SummaryItem> summaryItems) {
-        this.buyOrders = filterOrders(summaryItems, BuySummaryItem.class);
-        this.sellOrders = filterOrders(summaryItems, SellSummaryItem.class);
+        this.buyOrders = filterAndSortOrders(summaryItems, false);
+        this.sellOrders = filterAndSortOrders(summaryItems, true);
     }
 
     public List<SummaryItem> buyOrders() {
@@ -24,7 +24,7 @@ public class Summary {
         return Collections.unmodifiableList(sellOrders);
     }
 
-    private List<SummaryItem> filterOrders(Collection<SummaryItem> summaryItems, Class<? extends SummaryItem> summaryType) {
-        return summaryItems.stream().filter(o -> o.getClass() == summaryType).sorted().collect(Collectors.toList());
+    private List<SummaryItem> filterAndSortOrders(Collection<SummaryItem> summaryItems, boolean isSell) {
+        return summaryItems.stream().filter(o -> o.isSell() == isSell).sorted().collect(Collectors.toList());
     }
 }
