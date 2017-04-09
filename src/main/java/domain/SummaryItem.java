@@ -6,38 +6,39 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.math.BigDecimal;
 import java.util.Comparator;
 
+import static domain.OrderType.*;
 import static domain.OrderType.BUY;
 
 public class SummaryItem implements Comparable<SummaryItem>  {
 
     double GRAMS_IN_KG = 100d;
 
-    public static final SummaryItem DEFAULT_SUMMARY_ITEM = new SummaryItem(0, BigDecimal.ZERO, new BuyComparator(), new BuyCombiner(), true);
+    public static final SummaryItem DEFAULT_SUMMARY_ITEM = new SummaryItem(0, BigDecimal.ZERO, new BuyComparator(), new BuyCombiner(), BUY);
 
     private int quantity;
     private BigDecimal price;
     private Comparator comparator;
     private Combiner combiner;
-    private boolean isSell;
+    private OrderType orderType;
 
     public static SummaryItem from(Order order) {
         return order.type == BUY ? buy(order.grams, order.price) : sell(order.grams, order.price);
     }
 
     public static SummaryItem sell(int sellQuantity, BigDecimal sellPrice) {
-        return new SummaryItem(sellQuantity, sellPrice, new SellComparator(), new SellCombiner(), true);
+        return new SummaryItem(sellQuantity, sellPrice, new SellComparator(), new SellCombiner(), SELL);
     }
 
     public static SummaryItem buy(int buyQuantity, BigDecimal buyPrice) {
-        return new SummaryItem(buyQuantity, buyPrice, new BuyComparator(), new BuyCombiner(), false);
+        return new SummaryItem(buyQuantity, buyPrice, new BuyComparator(), new BuyCombiner(), BUY);
     }
 
-    protected SummaryItem(int quantity, BigDecimal price, Comparator comparator, Combiner combiner, boolean isSell) {
+    protected SummaryItem(int quantity, BigDecimal price, Comparator comparator, Combiner combiner, OrderType orderType) {
         this.quantity = quantity;
         this.price = price;
         this.comparator = comparator;
         this.combiner = combiner;
-        this.isSell = isSell;
+        this.orderType = orderType;
     }
 
     public SummaryItem combineQuantities(SummaryItem other) {
@@ -51,6 +52,10 @@ public class SummaryItem implements Comparable<SummaryItem>  {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class SummaryItem implements Comparable<SummaryItem>  {
         return new EqualsBuilder()
                 .append(quantity, summaryItem.getQuantity())
                 .append(price, summaryItem.getPrice())
-                .append(isSell, summaryItem.isSell())
+                .append(orderType, summaryItem.getOrderType())
                 .isEquals();
     }
 
@@ -78,7 +83,7 @@ public class SummaryItem implements Comparable<SummaryItem>  {
         return new HashCodeBuilder(17, 37)
                 .append(quantity)
                 .append(price)
-                .append(isSell)
+                .append(orderType)
                 .toHashCode();
     }
 
@@ -87,7 +92,4 @@ public class SummaryItem implements Comparable<SummaryItem>  {
         return comparator.compare(this, o);
     }
 
-    public boolean isSell() {
-        return isSell;
-    }
 }

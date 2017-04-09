@@ -6,14 +6,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static domain.OrderType.*;
+
 public class Summary {
 
     private List<SummaryItem> sellOrders = new ArrayList<>();
     private List<SummaryItem> buyOrders = new ArrayList<>();
 
     public Summary(Collection<SummaryItem> summaryItems) {
-        this.buyOrders = filterAndSortOrders(summaryItems, false);
-        this.sellOrders = filterAndSortOrders(summaryItems, true);
+        this.buyOrders = filterAndSortOrders(summaryItems, BUY);
+        this.sellOrders = filterAndSortOrders(summaryItems, SELL);
     }
 
     public List<SummaryItem> buyOrders() {
@@ -24,7 +26,7 @@ public class Summary {
         return Collections.unmodifiableList(sellOrders);
     }
 
-    private List<SummaryItem> filterAndSortOrders(Collection<SummaryItem> summaryItems, boolean isSell) {
-        return summaryItems.stream().filter(o -> o.isSell() == isSell).sorted().collect(Collectors.toList());
+    private List<SummaryItem> filterAndSortOrders(Collection<SummaryItem> summaryItems, OrderType orderType) {
+        return summaryItems.stream().filter(o -> o.getOrderType() == orderType).sorted().collect(Collectors.toList());
     }
 }

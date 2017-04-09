@@ -7,8 +7,8 @@ public class SellCombiner implements Combiner {
 
     @Override
     public SummaryItem combine(SummaryItem first, SummaryItem second) {
-        assert first.isSell() == true;
-        if (second.isSell()) {
+        assert first.getOrderType() == OrderType.SELL;
+        if (second.getOrderType() == OrderType.SELL) {
             return sell(second.getQuantity() + first.getQuantity(), first.getPrice());
         } else {
             int total = second.getQuantity() - first.getQuantity();
