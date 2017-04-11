@@ -13,10 +13,13 @@ public class OrderService {
 
     private Set<Order> orders = new LinkedHashSet<>();
 
+    /**
+    * Get list of current registered orders in registration order 
+    */
     public Set<Order> orders() { return Collections.unmodifiableSet(orders); }
 
     /**
-     * Add a new order(s) to current order
+     * Add a new order(s) to current registered orders
      * @param newOrders
      */
     public void register(Order... newOrders) { Collections.addAll(orders, newOrders); }
